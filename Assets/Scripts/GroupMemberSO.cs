@@ -28,7 +28,7 @@ public class GroupMemberSO : ScriptableObject
     [Range(0.5f, 1.5f)]
     public float recoveryRate = 1.0f;          //회복력
     [Range(0.3f, 1.5f)]
-    public float zombieResistance = 0.5f;
+    public float zombieResistance = 0.5f; //좀비 저항력
 
     [Header("설명")]
     [TextArea(2, 3)]
