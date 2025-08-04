@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [Header("특정 맴버아이템 소모 버튼")]
     public Button[] individualFoodButtons;
     public Button[] individualHealButtons;
+    public Button[] individualHeatButtons;
 
     [Header("이벤트 시스템")]
     public EventSO[] events;                 //이벤트 목록
@@ -63,6 +64,13 @@ public class GameManager : MonoBehaviour
     public int[] memberHunger;             //배고픔
     public int[] memberBodyTemp;            //체온
     public int[] memberInfection;         //감염
+    
+
+    //하루에 한 번만 아이템을 사용 할 수 있게 하는 변수
+    public bool hasUsedFoodToday = false;         //음식 아이템 사용 여부
+    public bool hasUsedMedicineToday = false;     //의약품 아이템 사용 여부
+    public bool hasUsedFuelToday = false;         //연료 아이템 사용 여부
+    public bool hasUsedVaccineToday = false;      //백신 아이템 사용 여부
 
 
     // Start is called before the first frame update
@@ -202,6 +210,13 @@ public class GameManager : MonoBehaviour
         CheckRandomEvent();
         UpdateUI();
         CheckGameOver();
+
+        //다음 날 초기화
+        hasUsedFoodToday = false;         
+        hasUsedMedicineToday = false;    
+        hasUsedFuelToday = false;         
+        hasUsedVaccineToday = false;      
+
     }
 
     string GetMemberStatus(int memberIndex)
@@ -262,6 +277,7 @@ public class GameManager : MonoBehaviour
 
         food--;
         UseItemOnAllMembers(foodItem);
+        hasUsedFoodToday = true;                                     //오늘 음식 사용 여부
         UpdateUI();
     }
 
@@ -271,6 +287,7 @@ public class GameManager : MonoBehaviour
 
         fuel--;
         UseItemOnAllMembers(fuelItem);
+        hasUsedFuelToday = true;                                     //오늘 연료 사용 여부
         UpdateUI();
     }
 
@@ -280,6 +297,7 @@ public class GameManager : MonoBehaviour
 
         medicine--;
         UseItemOnAllMembers(medicineItem);
+        hasUsedMedicineToday = true;                                   //오늘 의약품 사용 여부
         UpdateUI();
     }
 
@@ -289,6 +307,7 @@ public class GameManager : MonoBehaviour
 
         vaccine--;
         UseItemOnAllMembers(vaccineItem);
+        hasUsedVaccineToday = true;                                   //오늘 백신 사용 여부
         UpdateUI();
     }
 
@@ -312,6 +331,7 @@ public class GameManager : MonoBehaviour
 
         food--;
         ApplyItemEffect(memberIndex, foodItem);
+        hasUsedFoodToday = true; //오늘 음식 사용 여부
         UpdateUI();
     }
 
@@ -322,6 +342,7 @@ public class GameManager : MonoBehaviour
 
         medicine--;
         ApplyItemEffect(memberIndex, medicineItem);
+        hasUsedMedicineToday = true; //오늘 의약품 사용 여부
         UpdateUI();
     }
 
@@ -332,6 +353,7 @@ public class GameManager : MonoBehaviour
 
         vaccine--;
         ApplyItemEffect(memberIndex, vaccineItem);
+        hasUsedVaccineToday = true; //오늘 백신 사용 여부
         UpdateUI();
     }
 
