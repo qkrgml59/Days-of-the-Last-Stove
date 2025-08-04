@@ -19,6 +19,13 @@ public class Expendition : MonoBehaviour
     private GameManager gameManager;
     private ExpeditionSO currentExpedition;
 
+    [Header("장비 시스템")]
+    public EquipmentSO[] availableEquiments;
+    public Dropdown equipmentDropDown;
+
+    public int selectedEquipmentIndex = 0;
+    public int[] equipmentDurability;
+
 
     public void Start()
     {
@@ -36,33 +43,96 @@ public class Expendition : MonoBehaviour
             memberButtons[i].onClick.AddListener(() => StartExpedition(memberIndex));  //멤버 버튼 클릭 시 StartExpedition 호출
         }
 
+        InitializoEquipmentDurability();
 
+        SetupEquipmentDropDown();
+        equipmentDropDown.onValueChanged.AddListener(OnEquipmentChanged);
 
     }
 
-    void UpdateExpeditionInfo()                //탐방 정보를 표시하는 함수
+    void InitializoEquipmentDurability()
     {
-        if (currentExpedition != null)
-        {
-            expeditionInforText.text = $"탐방 : {currentExpedition.expeditionName}\n" +
-                                      $"{currentExpedition.description}\n" +
-                                      $"기본 성공률 : {currentExpedition.baseSuccessRate}%";
+        equipmentDurability = new int[availableEquiments.Length];
 
+        for (int i = 0; i < availableEquiments.Length; i++)
+        {
+            equipmentDurability[i] = availableEquiments[i].maxDurability;
         }
     }
 
-    void UpdateMemberButtons()                                 //멤버 버튼 업데이트 정보
-    { 
-        for (int i = 0; i < memberButtons.Length && i < gameManager.groupMembers.Length; i ++)
-        {
-            GroupMemberSO member = gameManager.groupMembers[i];
-            bool canGo = gameManager.memberHealth[i] > 20;                  //체력 20 이상일 때 탐방 가능
+    void SetupEquipmentDropDown()
+    {
+        equipmentDropDown.options.Clear();
 
-            Text buttonText = memberButtons[i].GetComponentInChildren<Text>();
-            buttonText.text = $"{member.memberName}\n 체력 : {gameManager.memberHealth[i]}";
-            memberButtons[i].interactable = canGo;
+        for (int i = 0; i < availableEquiments.Length; i++)
+        {
+            string equipName = availableEquiments[i].equipmentName;
+
+            if (i == 0)
+            {
+                equipmentDropDown.options.Add(new Dropdown.OptionData(equipName));
+            }
+            else if (equipmentDurability[i] <= 0)
+            {
+                equipmentDropDown.options.Add(new Dropdown.OptionData($"{equipName} (부러짐)"));
+            }
+            else
+            {
+                equipmentDropDown.options.Add(new Dropdown.OptionData($"{equipName} ({equipmentDurability[i]} / {availableEquiments[i].maxDurability})"));
+            }
         }
+
+        equipmentDropDown.value = 0;
+        equipmentDropDown.RefreshShownValue();
     }
+            void OnEquipmentChanged(int equipmentIndex)
+            {
+                selectedEquipmentIndex = equipmentIndex;
+                UpdateExpeditionInfo();
+            }
+
+            void UpdateExpeditionInfo()
+            {
+                if (currentExpedition != null)
+                {
+                    EquipmentSO selectedEquipment = availableEquiments[selectedEquipmentIndex];
+
+                    int equipBouns = (selectedEquipmentIndex > 0 && equipmentDurability[selectedEquipmentIndex] <= 0) ? 0 : selectedEquipment.successBouns;
+                    int totalSuccessRate = currentExpedition.baseSuccessRate + equipBouns;
+
+                    string durabilityInfo = "";
+
+                    if (selectedEquipmentIndex > 0)
+                    {
+                        if (equipmentDurability[selectedEquipmentIndex] <= 0) durabilityInfo = "(부러진 상태 - 효과 없음)";
+                        else durabilityInfo = $"\n장비 내구도: {equipmentDurability[selectedEquipmentIndex]} / {selectedEquipment.maxDurability}";
+                    }
+
+                    expeditionInforText.text = $"탐방: {currentExpedition.expeditionName}\n" +
+                                               $"{currentExpedition.description}\n" +
+                                               $"기본 성공률 : {currentExpedition.baseSuccessRate}%\n" +
+                                               $"장비 보너스 : +{equipBouns}%\n" +
+                                               $"최종 성공률 :{totalSuccessRate}%\n";
+
+
+
+                }
+            }
+
+            void UpdateMemberButtons()                                 //멤버 버튼 업데이트 정보
+            {
+                for (int i = 0; i < memberButtons.Length && i < gameManager.groupMembers.Length; i++)
+                {
+                    GroupMemberSO member = gameManager.groupMembers[i];
+                    bool canGo = gameManager.memberHealth[i] > 20;                  //체력 20 이상일 때 탐방 가능
+
+                    Text buttonText = memberButtons[i].GetComponentInChildren<Text>();
+                    buttonText.text = $"{member.memberName}\n 체력 : {gameManager.memberHealth[i]}";
+                    memberButtons[i].interactable = canGo;
+                }
+            }
+
+        
 
     public void OpenMemberSelect()
     {
@@ -84,13 +154,25 @@ public class Expendition : MonoBehaviour
         memberSelectPanel.SetActive(false);
 
         GroupMemberSO member = gameManager.groupMembers[memberIndex];
+        EquipmentSO selectedEquip = availableEquiments[selectedEquipmentIndex];
 
         //성공률 계산 (ExpeditionSO의 기본 성공률 + 멤버 보너스)
-        int memberBouns = 0;
-        int finalSuccessRate = currentExpedition.baseSuccessRate + memberBouns;
+        bool equipmentBroken = selectedEquipmentIndex > 0 && equipmentDurability[selectedEquipmentIndex] < 0;
+        int rewardBouns = equipmentBroken ? 0 : selectedEquip.rewardBonus;
+        int equipBouns = equipmentBroken ? 0 : selectedEquip.successBouns;
+
+
+        int finalSuccessRate = currentExpedition.baseSuccessRate + equipBouns;
         finalSuccessRate = Mathf.Clamp(finalSuccessRate, 5, 95);
 
         bool success = Random.Range(1, 101) <= finalSuccessRate;
+
+        if (selectedEquipmentIndex > 0 && !equipmentBroken)
+        {
+            equipmentDurability[selectedEquipmentIndex] -= 1;
+            SetupEquipmentDropDown();
+        }
+        
 
         if (success)
         {
@@ -103,8 +185,8 @@ public class Expendition : MonoBehaviour
             gameManager.memberHunger[memberIndex] -= 5;
 
             resultText.text = $"{member.memberName} {currentExpedition.expeditionName} 성공! (성공률 : {finalSuccessRate}%)\n" +
-                         $"음식 : {currentExpedition.sucessFoodReward}, 연료 + {currentExpedition.successFuelReward}," +
-                         $"약품 + {currentExpedition.successFuelReward}";
+                         $"음식 : {currentExpedition.sucessFoodReward + rewardBouns}, 연료 + {currentExpedition.successFuelReward + rewardBouns}," +
+                         $"약품 + {currentExpedition.successFuelReward + rewardBouns}";
 
             resultText.color = Color.green;
          }

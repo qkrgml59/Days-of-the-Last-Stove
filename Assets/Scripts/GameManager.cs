@@ -5,6 +5,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 
+//해야하는 것 모두에게 아이템 사용 할 때 멤버 수 만큼 삭제
+
 public class GameManager : MonoBehaviour
 {
     [Header("그룹 구성원 템플릿")]
@@ -38,10 +40,17 @@ public class GameManager : MonoBehaviour
     public int medicine = 4;                // 의약품 개수
     public int vaccine = 0;                // 백신 개수
 
+
+    [Header("특정 멤버 아이템 사용 팝업")]
+    public GameObject ItemPopup;     //아이템 사용 팝업
+    public Text itemPopupTitleText;   //아이템 사용 팝업 제목
+    public Button closePopupButton;   //아이템 사용 팝업 닫기 버튼
+    public Button openPopupButton;       // 팝업 열기 버튼
+
     [Header("특정 맴버아이템 소모 버튼")]
     public Button[] individualFoodButtons;
     public Button[] individualHealButtons;
-    public Button[] individualHeatButtons;
+    public Button[] individualVaccinButtons;
 
     [Header("이벤트 시스템")]
     public EventSO[] events;                 //이벤트 목록
@@ -108,6 +117,12 @@ public class GameManager : MonoBehaviour
 
         inventoryPanel.SetActive(false);
         inventoryButton.onClick.AddListener(OpenInvetoryPopup);
+        closeInventoryButton.onClick.AddListener(CloseInventoryPopup);
+
+
+        ItemPopup.SetActive(false);            //아이템 팝업 비활성화
+        openPopupButton.onClick.AddListener(OpenItemPopup); 
+        closePopupButton.onClick.AddListener(CloseItemPopup); 
 
     }
 
@@ -273,6 +288,7 @@ public class GameManager : MonoBehaviour
 
     public void UseFoodItem()                                         //음식 아이템 사용
     {
+        if(hasUsedFoodToday) return;                          //오늘 음식 사용 여부 확인
         if (food <= 0 || foodItem == null) return;                   //오류 방지 처리
 
         food--;
@@ -283,6 +299,7 @@ public class GameManager : MonoBehaviour
 
     public void UseFuelItem()                                         //음식 아이템 사용
     {
+        if (hasUsedFuelToday) return;                      
         if (fuel <= 0 || fuelItem == null) return;                   //오류 방지 처리
 
         fuel--;
@@ -293,6 +310,7 @@ public class GameManager : MonoBehaviour
 
     public void UseMedicItem()                                         //음식 아이템 사용
     {
+        if(hasUsedMedicineToday) return;                          
         if (medicine <= 0 || medicineItem == null) return;                   //오류 방지 처리
 
         medicine--;
@@ -303,6 +321,8 @@ public class GameManager : MonoBehaviour
 
     public void Usevaccinetem()                                         //음식 아이템 사용
     {
+        if(hasUsedVaccineToday) return;
+
         if (vaccine <= 0 || vaccineItem == null) return;                   //오류 방지 처리
 
         vaccine--;
@@ -326,6 +346,7 @@ public class GameManager : MonoBehaviour
 
     public void GiveFoodToMember(int memberIndex)
     {
+        if(hasUsedFoodToday) return;                         
         if (food <= 0 || foodItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
@@ -337,6 +358,7 @@ public class GameManager : MonoBehaviour
 
     public void HealMember(int memberIndex)
     {
+        if (hasUsedMedicineToday) return;
         if (medicine <= 0 || medicineItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
@@ -348,6 +370,7 @@ public class GameManager : MonoBehaviour
 
     public void VaccineMember(int memberIndex)
     {
+        if (hasUsedVaccineToday) return;
         if (vaccine <= 0 || vaccineItem == null) return;
         if (memberInfection[memberIndex] <= 0) return;
 
@@ -441,6 +464,24 @@ public class GameManager : MonoBehaviour
     public void OpenInvetoryPopup()
     {
         inventoryPanel.SetActive(true);
+        UpdateUI();
+    }
+
+    public void CloseInventoryPopup()
+    {
+        inventoryPanel.SetActive(false);
+        UpdateUI();
+    }    
+
+    public void OpenItemPopup()
+    {
+        ItemPopup.SetActive(true);
+        UpdateUI();
+    }
+
+    public void CloseItemPopup()
+    {
+        ItemPopup.SetActive(false);
         UpdateUI();
     }
 
