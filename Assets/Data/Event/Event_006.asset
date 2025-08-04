@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30fd4e92f5df8c24d99765d5eeef784f, type: 3}
-  m_Name: Event_001
+  m_Name: Event_006
   m_EditorClassIdentifier: 
   eventTitel: "\uC774\uBCA4\uD2B8 \uBC1C\uC0DD!"
-  eventDescription: "\uC6B0\uC5F0\uD788 \uB9CC\uB09C \uC544\uB294 \uC0AC\uB78C\uC774
-    \uC790\uC6D0\uC744 \uAE30\uBD80\uD588\uC2B5\uB2C8\uB2E4!"
-  foodChange: 1
-  fuelChange: 0
-  medicineChange: 2
+  eventDescription: "\uD3C9\uC18C \uCE5C\uD558\uC9C0 \uC54A\uC740 \uCE5C\uAD6C\uAC00
+    \uBB3C\uAC74\uC744 \uD6D4\uCCD0\uAC14\uC2B5\uB2C8\uB2E4!"
+  foodChange: -2
+  fuelChange: -1
+  medicineChange: -2
   vaccineChange: 0
   healthChange: 0
   hungerChange: 0
   tempChange: 0
   infectionChange: 0
-  probability: 10
+  probability: 40

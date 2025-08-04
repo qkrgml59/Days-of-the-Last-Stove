@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b39ff56abbf52d44e8683f1426debcd3, type: 3}
-  m_Name: Expedition_001 1
+  m_Name: Expedition_003
   m_EditorClassIdentifier: 
-  equipmentName: "\uB9E8\uC190"
-  successBouns: 0
-  rewardBonus: 0
-  maxDurability: 1
-  description: "\uAE30\uBCF8 \uC0C1\uD0DC"
+  equipmentName: "\uC57C\uAD6C \uBC29\uB9DD\uC774"
+  successBouns: 2
+  rewardBonus: 1
+  maxDurability: 6
+  description: "\uB9E4\uC6B0 \uAC15\uB825\uD558\uC9C0\uB9CC \uBB34\uAC81\uC2B5\uB2C8\uB2E4."

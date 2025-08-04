@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fd1619d7be39c4e9c19f88a16cfc34, type: 3}
+  m_Name: Expedition_003
+  m_EditorClassIdentifier: 
+  expeditionName: "\uD0D0\uBC29"
+  description: "\uBCF4\uAC74\uC2E4\uC5D0 \uB4E4\uC5B4\uAC00 \uC758\uC57D\uD488\uC744
+    \uCC3E\uC2B5\uB2C8\uB2E4."
+  difficulty: 4
+  sucessFoodReward: 0
+  successFuelReward: 0
+  successMedicineReward: 4
+  successVaccineReward: 2
+  failHealthPenalty: -25
+  failHungerPenalty: -20
+  failTempPenalty: -10
+  failInfectionPenalty: 15
+  baseSuccessRate: 15
