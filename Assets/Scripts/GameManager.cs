@@ -350,7 +350,7 @@ public class GameManager : MonoBehaviour
         if (food <= 0 || foodItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
-        food--;
+        food= -4;
         ApplyItemEffect(memberIndex, foodItem);
         hasUsedFoodToday = true; //오늘 음식 사용 여부
         UpdateUI();
@@ -362,7 +362,7 @@ public class GameManager : MonoBehaviour
         if (medicine <= 0 || medicineItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
-        medicine--;
+        medicine= -4;
         ApplyItemEffect(memberIndex, medicineItem);
         hasUsedMedicineToday = true; //오늘 의약품 사용 여부
         UpdateUI();
@@ -374,7 +374,7 @@ public class GameManager : MonoBehaviour
         if (vaccine <= 0 || vaccineItem == null) return;
         if (memberInfection[memberIndex] <= 0) return;
 
-        vaccine--;
+        vaccine = -4;
         ApplyItemEffect(memberIndex, vaccineItem);
         hasUsedVaccineToday = true; //오늘 백신 사용 여부
         UpdateUI();

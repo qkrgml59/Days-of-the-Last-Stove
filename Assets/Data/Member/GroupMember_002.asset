@@ -23,5 +23,5 @@ MonoBehaviour:
   foodEfficiency: 1.5
   coldResistance: 0.6
   recoveryRate: 0.8
-  zombieResistance: 1.5
+  zombieResistance: 1
   description: "\uADF8\uB8F9 \uAD6C\uC131\uC6D0 \uC785\uB2C8\uB2E4."
