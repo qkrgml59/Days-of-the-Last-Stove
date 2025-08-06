@@ -23,4 +23,4 @@ MonoBehaviour:
   hungerChange: 0
   tempChange: 0
   infectionChange: 0
-  probability: 10
+  probability: 30

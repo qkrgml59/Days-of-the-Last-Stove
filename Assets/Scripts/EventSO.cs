@@ -26,4 +26,8 @@ public class EventSO : ScriptableObject
     [Header("발생 확률")]
     [Range(1, 100)]
     public int probability = 30;
+
+
+    [Header("사운드 이펙트")]
+    public AudioClip eventSound;
 }

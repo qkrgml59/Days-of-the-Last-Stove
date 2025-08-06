@@ -21,6 +21,6 @@ MonoBehaviour:
   vaccineChange: 0
   healthChange: 0
   hungerChange: -5
-  tempChange: -10
+  tempChange: -25
   infectionChange: 0
   probability: 25

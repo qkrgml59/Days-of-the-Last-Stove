@@ -75,6 +75,10 @@ public class GameManager : MonoBehaviour
     public int usedItemCountToday = 0;
     public int dailyItemUseLimit = 2;
 
+    [Header("사운드 시스템")]
+    public AudioSource audioSource;           //사운드 소스
+
+
 
 
     //런타임 데이터
@@ -223,7 +227,7 @@ public class GameManager : MonoBehaviour
     {
         int baseHungerLoss = 15;
         int baseTempLoss = 1;
-        int baseInfectionLoss = 2;
+        int baseInfectionLoss = 5;
 
         for (int i = 0; i < groupMembers.Length; i++)
         {
@@ -480,11 +484,13 @@ public class GameManager : MonoBehaviour
         food += eventSO.foodChange;
         fuel += eventSO.fuelChange;
         medicine += eventSO.medicineChange;
+        vaccine += eventSO.vaccineChange; 
 
         //자원 최소값 보정
         food = Mathf.Max(0, food);
         fuel = Mathf.Max(0, fuel);
         medicine = Mathf.Max(0, medicine);
+        vaccine = Mathf.Max(0, vaccine);
 
         //모든 살아있는 멤버에게 상태 변화적용
         for (int i = 0; i < groupMembers.Length; i++)
@@ -494,15 +500,20 @@ public class GameManager : MonoBehaviour
                 memberHealth[i] += eventSO.healthChange;
                 memberHunger[i] += eventSO.hungerChange;
                 memberBodyTemp[i] += eventSO.tempChange;
+                memberInfection[i] += eventSO.infectionChange;
 
                 //제한값 적용
                 GroupMemberSO member = groupMembers[i];
                 memberHealth[i] = Mathf.Clamp(memberHealth[i], 0, member.maxHealth);
                 memberHunger[i] = Mathf.Clamp(memberHunger[i], 0, member.maxHunger);
                 memberBodyTemp[i] = Mathf.Clamp(memberBodyTemp[i], 0, member.normalBodyTemp);
+                memberInfection[i] = Mathf.Clamp(memberInfection[i], 0, 100); 
+
             }
         }
     }
+
+   
 
     void ShowEventPopup(EventSO eventSO)
     {
@@ -515,6 +526,11 @@ public class GameManager : MonoBehaviour
 
         //이벤트 효과 적용
         ApplyEventEffects(eventSO);
+
+        if(eventSO.eventSound != null)
+        {
+            audioSource.PlayOneShot(eventSO.eventSound); //이벤트 사운드 재생
+        }
 
         //게임 진행 일시정지
         nextDayButton.interactable = false;
