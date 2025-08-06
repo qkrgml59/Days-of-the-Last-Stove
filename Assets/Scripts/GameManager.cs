@@ -66,6 +66,15 @@ public class GameManager : MonoBehaviour
     public Text inventoryText;                //인벤토리 표시 텍스트
     public Button closeInventoryButton;       //인벤토리 닫기 버튼
 
+    [Header("아이템 사용 여부")]
+    //public bool hasUsedFoodToday;
+    //public bool hasUsedVaccine;
+    //public bool hasUsedFuel;
+    //public bool hasUsedMedicne;
+    //이전 코드ㅡ
+    public int usedItemCountToday = 0;
+    public int dailyItemUseLimit = 2;
+
 
 
     //런타임 데이터
@@ -177,6 +186,37 @@ public class GameManager : MonoBehaviour
 
             UpdateTextColor(memberStatusTexts[i], memberHealth[i]);
         }
+
+        
+        int aliveCount = GetAlivememberCount();
+
+        //버튼 활성/비활성
+        feedButton.interactable = (food >= aliveCount && aliveCount > 0);
+        heatButton.interactable = (fuel >= 1 && aliveCount > 0);                           //연료는 한개만 있어도 버튼 활성화 됨.
+        healButton.interactable = (medicine >= aliveCount && aliveCount > 0);
+        vaccineButton.interactable = (vaccine >= aliveCount && aliveCount > 0);
+
+
+        for (int i = 0; i < individualFoodButtons.Length; i++)
+        {
+            bool canGive = (food > 0 && memberHealth[i] > 0);
+            individualFoodButtons[i].interactable = canGive;
+        }
+
+
+        for (int i = 0; i < individualHealButtons.Length; i++)
+        {
+            bool canGive = (medicine > 0 && memberHealth[i] > 0);
+            individualHealButtons[i].interactable = canGive;
+        }
+
+        for (int i = 0; i < individualVaccinButtons.Length; i++)
+        {
+            bool canGive = (vaccine > 0 && memberHealth[i] > 0);
+            individualVaccinButtons[i].interactable = canGive;
+        }
+
+
     }
 
     void ProcessDilyChange()
@@ -221,16 +261,18 @@ public class GameManager : MonoBehaviour
     public void NextDay()
     {
         currentDay += 1;
+
+        usedItemCountToday =0;
         ProcessDilyChange();
         CheckRandomEvent();
         UpdateUI();
         CheckGameOver();
 
         //다음 날 초기화
-        hasUsedFoodToday = false;         
-        hasUsedMedicineToday = false;    
-        hasUsedFuelToday = false;         
-        hasUsedVaccineToday = false;      
+       // hasUsedFoodToday = false;         
+       // hasUsedMedicineToday = false;    
+       // hasUsedFuelToday = false;         
+       // hasUsedVaccineToday = false;      이전 코드
 
     }
 
@@ -288,46 +330,61 @@ public class GameManager : MonoBehaviour
 
     public void UseFoodItem()                                         //음식 아이템 사용
     {
-        if(hasUsedFoodToday) return;                          //오늘 음식 사용 여부 확인
+
+        if (usedItemCountToday >= dailyItemUseLimit) return;
+        //if(hasUsedFoodToday) return;                    이전코드      //오늘 음식 사용 여부 확인
         if (food <= 0 || foodItem == null) return;                   //오류 방지 처리
 
-        food--;
+        int aliveCount = GetAlivememberCount();      //살아있는 사람 수
+        if (food < aliveCount) return;
+
+        food -= aliveCount;                    //인원 수 만큼 소모
         UseItemOnAllMembers(foodItem);
-        hasUsedFoodToday = true;                                     //오늘 음식 사용 여부
+        usedItemCountToday++;                                   //오늘 음식 사용 여부
         UpdateUI();
     }
 
     public void UseFuelItem()                                         //음식 아이템 사용
     {
-        if (hasUsedFuelToday) return;                      
+        // if (hasUsedFuelToday) return;
+
+        if (usedItemCountToday >= dailyItemUseLimit) return;
         if (fuel <= 0 || fuelItem == null) return;                   //오류 방지 처리
+
+        int aliveCount = GetAlivememberCount();      //살아있는 사람 수
 
         fuel--;
         UseItemOnAllMembers(fuelItem);
-        hasUsedFuelToday = true;                                     //오늘 연료 사용 여부
+        usedItemCountToday++;                                 //오늘 연료 사용 여부
         UpdateUI();
     }
 
     public void UseMedicItem()                                         //음식 아이템 사용
     {
-        if(hasUsedMedicineToday) return;                          
+        //if(hasUsedMedicineToday) return;
+        if (usedItemCountToday >= dailyItemUseLimit) return;
         if (medicine <= 0 || medicineItem == null) return;                   //오류 방지 처리
 
-        medicine--;
+        int aliveCount = GetAlivememberCount();
+
+        medicine -= aliveCount;
         UseItemOnAllMembers(medicineItem);
-        hasUsedMedicineToday = true;                                   //오늘 의약품 사용 여부
+        usedItemCountToday++;                                   //오늘 의약품 사용 여부
         UpdateUI();
     }
 
     public void Usevaccinetem()                                         //음식 아이템 사용
     {
-        if(hasUsedVaccineToday) return;
+        if (usedItemCountToday >= dailyItemUseLimit) return;
+        if (hasUsedVaccineToday) return;
 
         if (vaccine <= 0 || vaccineItem == null) return;                   //오류 방지 처리
 
-        vaccine--;
+        int aliveCount = GetAlivememberCount();
+
+        vaccine -= aliveCount;
         UseItemOnAllMembers(vaccineItem);
-        hasUsedVaccineToday = true;                                   //오늘 백신 사용 여부
+        usedItemCountToday++;                                     //오늘 백신 사용 여부
         UpdateUI();
     }
 
@@ -343,45 +400,56 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     public void GiveFoodToMember(int memberIndex)
     {
-        if(hasUsedFoodToday) return;                         
+        if (usedItemCountToday >= dailyItemUseLimit) return;
         if (food <= 0 || foodItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
-        food= -4;
+        int aliveCount = GetAlivememberCount();
+
+        food--;
         ApplyItemEffect(memberIndex, foodItem);
-        hasUsedFoodToday = true; //오늘 음식 사용 여부
+        usedItemCountToday++;
         UpdateUI();
     }
 
     public void HealMember(int memberIndex)
     {
-        if (hasUsedMedicineToday) return;
+        if (usedItemCountToday >= dailyItemUseLimit) return;
         if (medicine <= 0 || medicineItem == null) return;
         if (memberHealth[memberIndex] <= 0) return;
 
-        medicine= -4;
+        int aliveCount = GetAlivememberCount();
+
+        medicine--;
         ApplyItemEffect(memberIndex, medicineItem);
-        hasUsedMedicineToday = true; //오늘 의약품 사용 여부
+        usedItemCountToday++;
         UpdateUI();
     }
 
     public void VaccineMember(int memberIndex)
     {
-        if (hasUsedVaccineToday) return;
+        if (usedItemCountToday >= dailyItemUseLimit) return;
         if (vaccine <= 0 || vaccineItem == null) return;
         if (memberInfection[memberIndex] <= 0) return;
 
-        vaccine = -4;
+        int aliveCount = GetAlivememberCount();
+
+        vaccine--;
         ApplyItemEffect(memberIndex, vaccineItem);
-        hasUsedVaccineToday = true; //오늘 백신 사용 여부
+        usedItemCountToday++;
         UpdateUI();
     }
-
-
-
+    private int GetAlivememberCount()
+    {
+        int count = 0;
+        for (int i = 0; i < memberHealth.Length; i++)
+        {
+            if (memberHealth[i] > 0) count++;
+        }
+        return count;
+    }
     void ApplyItemEffect(int memberIndex, ItemSO item)
     {
         GroupMemberSO member = groupMembers[memberIndex];
