@@ -23,4 +23,4 @@ MonoBehaviour:
   failHungerPenalty: -10
   failTempPenalty: -2
   failInfectionPenalty: 10
-  baseSuccessRate: 30
+  baseSuccessRate: 35

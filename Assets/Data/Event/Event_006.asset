@@ -15,8 +15,8 @@ MonoBehaviour:
   eventTitel: "\uC774\uBCA4\uD2B8 \uBC1C\uC0DD!"
   eventDescription: "\uD3C9\uC18C \uCE5C\uD558\uC9C0 \uC54A\uC740 \uCE5C\uAD6C\uAC00
     \uBB3C\uAC74\uC744 \uD6D4\uCCD0\uAC14\uC2B5\uB2C8\uB2E4!"
-  foodChange: -2
-  fuelChange: -1
+  foodChange: -1
+  fuelChange: 0
   medicineChange: -2
   vaccineChange: 0
   healthChange: 0
@@ -24,3 +24,4 @@ MonoBehaviour:
   tempChange: 0
   infectionChange: 0
   probability: 40
+  eventSound: {fileID: 8300000, guid: 57cb71e2ff6773d4a970f143464292c7, type: 3}

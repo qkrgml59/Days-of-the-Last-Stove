@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Expedition_002
   m_EditorClassIdentifier: 
   equipmentName: "\uC190\uC804\uB4F1"
-  successBouns: 15
+  successBouns: 20
   rewardBonus: 2
   maxDurability: 3
   description: "\uBD88\uBE5B\uC774 \uAC15\uD574 \uB208\uC744 \uB728\uAE30 \uD798\uB4ED\uB2C8\uB2E4."

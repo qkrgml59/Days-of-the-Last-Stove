@@ -23,3 +23,4 @@ MonoBehaviour:
   tempChange: -5
   infectionChange: 7
   probability: 40
+  eventSound: {fileID: 8300000, guid: 57cb71e2ff6773d4a970f143464292c7, type: 3}

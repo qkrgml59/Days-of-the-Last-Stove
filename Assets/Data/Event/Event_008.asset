@@ -23,4 +23,5 @@ MonoBehaviour:
   hungerChange: 0
   tempChange: 0
   infectionChange: 0
-  probability: 30
+  probability: 35
+  eventSound: {fileID: 8300000, guid: a7091f7b917d7e943beb06db935303c5, type: 3}

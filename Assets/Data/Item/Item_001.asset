@@ -16,7 +16,7 @@ MonoBehaviour:
   itemIcon: {fileID: 0}
   itemType: 0
   healthEffect: 0
-  hungerEffect: 10
+  hungerEffect: 15
   tempEffect: 0
   infectionEffect: 0
   description: "\uD50C\uB808\uC774\uC5B4\uC758 \uBC30\uACE0\uD514\uC744 \uCC44\uC6CC\uC90D\uB2C8\uB2E4."

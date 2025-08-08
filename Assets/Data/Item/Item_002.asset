@@ -17,6 +17,6 @@ MonoBehaviour:
   itemType: 0
   healthEffect: 0
   hungerEffect: 0
-  tempEffect: 5
+  tempEffect: 10
   infectionEffect: 0
   description: "\uD50C\uB808\uC774\uC5B4\uC758 \uCCB4\uC628\uC744 \uC62C\uB824\uC90D\uB2C8\uB2E4."

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: "\uC57D"
   itemIcon: {fileID: 0}
   itemType: 0
-  healthEffect: 15
+  healthEffect: 20
   hungerEffect: 0
   tempEffect: 0
   infectionEffect: 0

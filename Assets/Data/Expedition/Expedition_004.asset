@@ -19,7 +19,7 @@ MonoBehaviour:
   sucessFoodReward: 0
   successFuelReward: 0
   successMedicineReward: 0
-  successVaccineReward: 3
+  successVaccineReward: 4
   failHealthPenalty: -30
   failHungerPenalty: -30
   failTempPenalty: -10

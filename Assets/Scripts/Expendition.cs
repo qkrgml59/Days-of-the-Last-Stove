@@ -180,13 +180,15 @@ public class Expendition : MonoBehaviour
             gameManager.food += currentExpedition.sucessFoodReward;
             gameManager.fuel += currentExpedition.successFuelReward;
             gameManager.medicine += currentExpedition.successMedicineReward;
+            gameManager.vaccine += currentExpedition.successVaccineReward;
 
             //탐방 완료 한 맴버 약간 피로
             gameManager.memberHunger[memberIndex] -= 5;
 
             resultText.text = $"{member.memberName} {currentExpedition.expeditionName} 성공! (성공률 : {finalSuccessRate}%)\n" +
                          $"음식 : {currentExpedition.sucessFoodReward + rewardBouns}, 연료 + {currentExpedition.successFuelReward + rewardBouns}," +
-                         $"약품 + {currentExpedition.successFuelReward + rewardBouns}";
+                        $"약품 + {currentExpedition.successMedicineReward + rewardBouns}, " +
+                         $"백신 + {currentExpedition.successVaccineReward + rewardBouns}";
 
             resultText.color = Color.green;
          }
