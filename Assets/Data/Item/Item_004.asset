@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\uBC31\uC2E0"
   itemIcon: {fileID: 0}
-  itemType: 0
+  itemType: 3
   healthEffect: 0
   hungerEffect: 0
   tempEffect: 0
-  infectionEffect: 5
+  infectionEffect: 10
   description: "\uD50C\uB808\uC774\uC5B4\uC758 \uAC10\uC5FC\uB3C4\uB97C \uB0AE\uCDB0\uC90D\uB2C8\uB2E4."

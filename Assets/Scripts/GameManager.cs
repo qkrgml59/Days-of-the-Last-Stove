@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 //해야하는 것 모두에게 아이템 사용 할 때 멤버 수 만큼 삭제
@@ -78,6 +79,9 @@ public class GameManager : MonoBehaviour
     [Header("사운드 시스템")]
     public AudioSource audioSource;           //사운드 소스
 
+    [Header("캐릭터 이미지")]
+    public Image[] memberImages;              //맴버 이미지들
+
 
 
 
@@ -112,6 +116,8 @@ public class GameManager : MonoBehaviour
         vaccineButton.onClick.AddListener(Usevaccinetem);
 
 
+
+
         for (int i = 0; i < individualFoodButtons.Length && i < groupMembers.LongLength; i++)
         {
             int memberindex = i;
@@ -123,6 +129,14 @@ public class GameManager : MonoBehaviour
         {
             int memberindex = i;
             individualHealButtons[i].onClick.AddListener(() => HealMember(memberindex));
+        }
+
+
+        //백신 사용 코드를 안 씀
+        for (int i = 0; i < individualVaccinButtons.Length &&  i < groupMembers.LongLength; i++)
+        {
+            int memberindex = i; 
+            individualVaccinButtons[i].onClick.AddListener(() => VaccineMember(memberindex));
         }
 
         eventPopup.SetActive(false);
@@ -191,7 +205,7 @@ public class GameManager : MonoBehaviour
             UpdateTextColor(memberStatusTexts[i], memberHealth[i]);
         }
 
-        
+
         int aliveCount = GetAlivememberCount();
 
         //버튼 활성/비활성
@@ -220,6 +234,26 @@ public class GameManager : MonoBehaviour
             individualVaccinButtons[i].interactable = canGive;
         }
 
+        for (int i = 0; i < groupMembers.Length; i++)
+        {
+           
+
+            // 사망 여부 체크해서 투명 처리
+            if (memberHealth[i] <= 0)
+            {
+                Color c = memberImages[i].color;            //반투명 코드
+                c.a = 0.3f; // 반투명
+                memberImages[i].color = c;                            //이미지 반투명 처리
+            }
+            else
+            {
+                Color c = memberImages[i].color;
+                c.a = 1f; // 원래 상태               // 여기서 1은 기본 상태
+                memberImages[i].color = c;      //살아 있다면 원래 상태
+            }
+
+
+        }
 
     }
 
@@ -227,7 +261,7 @@ public class GameManager : MonoBehaviour
     {
         int baseHungerLoss = 15;
         int baseTempLoss = 1;
-        int baseInfectionLoss = 5;
+        int baseInfectionLoss = 8;
 
         for (int i = 0; i < groupMembers.Length; i++)
         {
@@ -317,7 +351,18 @@ public class GameManager : MonoBehaviour
         {
             nextDayButton.interactable = false;
             Debug.Log("게임 오버! 모든 구성원이 바이러스에서 이겨내지 못했습니다.");
+            SceneManager.LoadScene("GameOver"); 
         }
+
+        // 2주 버팀 → 게임 클리어
+        if (currentDay >= 14)
+        {
+            Debug.Log("2주 버팀! 게임 클리어!");
+            SceneManager.LoadScene("GameClear"); 
+            return;
+        }
+
+
     }
 
     void UpdateTextColor(Text text, int health)
@@ -444,6 +489,8 @@ public class GameManager : MonoBehaviour
         ApplyItemEffect(memberIndex, vaccineItem);
         usedItemCountToday++;
         UpdateUI();
+
+
     }
     private int GetAlivememberCount()
     {

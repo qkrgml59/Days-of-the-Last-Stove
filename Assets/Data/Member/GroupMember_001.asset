@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172bb4c7b17342d43890fb22799af6c4, type: 3}
   m_Name: GroupMember_001
   m_EditorClassIdentifier: 
-  memberName: "\uC131\uC778 \uB0A8\uC790"
+  memberName: "\uBC18\uC720\uD55C"
   protrait: {fileID: 0}
   gender: 0
   ageGroup: 0

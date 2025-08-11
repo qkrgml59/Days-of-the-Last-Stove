@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\uC57D"
   itemIcon: {fileID: 0}
-  itemType: 0
+  itemType: 2
   healthEffect: 20
   hungerEffect: 0
   tempEffect: 0

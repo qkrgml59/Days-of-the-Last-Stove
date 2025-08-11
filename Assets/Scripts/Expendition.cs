@@ -188,7 +188,7 @@ public class Expendition : MonoBehaviour
             resultText.text = $"{member.memberName} {currentExpedition.expeditionName} 성공! (성공률 : {finalSuccessRate}%)\n" +
                          $"음식 : {currentExpedition.sucessFoodReward + rewardBouns}, 연료 + {currentExpedition.successFuelReward + rewardBouns}," +
                         $"약품 + {currentExpedition.successMedicineReward + rewardBouns}, " +
-                         $"백신 + {currentExpedition.successVaccineReward + rewardBouns}";
+                         $"백신 + {currentExpedition.successVaccineReward}";
 
             resultText.color = Color.green;
          }
